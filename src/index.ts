@@ -13,7 +13,6 @@ import { YouTube } from './Services/YouTube';
 import { Twitch } from './Services/Twitch';
 import { DeviantArt } from './Services/DeviantArt';
 
-
 var manager = new ManagerBot();
 var cmd = new CommandLine(manager);
 var rest = new RestClient();
