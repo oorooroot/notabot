@@ -1,15 +1,18 @@
 import { ManagerBot } from './Bots/ManagerBot';
 import { DiscordBot } from './Bots/DiscordBot';
+
 import { Database } from './Utils/Database';
 import { CommandLine } from './Utils/CommandLine';
+import { Log } from './Utils/Log';
+import { RestClient } from './Utils/Rest';
+
 import { Subscriptions } from './Services/Subscriptions';
 import { TyanGenerator } from './Services/TyanGenerator';
 import { Gestures } from './Services/Gestures';
 import { YouTube } from './Services/YouTube';
 import { Twitch } from './Services/Twitch';
 import { DeviantArt } from './Services/DeviantArt';
-import { Log } from './Utils/Log';
-import { RestClient } from './Utils/Rest';
+
 
 var manager = new ManagerBot();
 var cmd = new CommandLine(manager);
