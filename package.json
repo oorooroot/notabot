@@ -1,0 +1,25 @@
+{
+  "name": "notabot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^11.0.0",
+    "feedparser": "^2.1.0",
+    "googleapis": "^16.1.0",
+    "node-rest-client": "^2.0.1",
+    "node-schedule": "^1.2.0",
+    "pegjs": "^0.10.0",
+    "request": "^2.79.0",
+    "sqlite3": "^3.1.8"
+  },
+  "devDependencies": {
+    "reflect-metadata": "^0.1.9"
+  }
+}

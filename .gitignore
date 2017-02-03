@@ -1,0 +1,7 @@
+/src/**/*.db
+/src/**/*.js
+/src/**/*.js.map
+/**/credentials/*.json
+node_modules/
+typings/
+.vscode/

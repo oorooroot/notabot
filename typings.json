@@ -1,0 +1,10 @@
+{
+  "name": "notabot",
+  "dependencies": {
+    "pegjs": "registry:dt/pegjs#0.10.0+20161119044246",
+    "request": "registry:dt/request#0.0.0+20161230173603"
+  },
+  "globalDependencies": {
+    "sqlite3": "registry:dt/sqlite3#2.2.3+20160724070935"
+  }
+}
