@@ -10,15 +10,64 @@ import { ManagerBot } from '../Bots/ManagerBot';
 
 const GRAMMAR_PATH = __dirname + "/CommandLine.peg";
 
+/**
+ * Interface for command line parser.
+ * @export
+ * @interface ICommandLine 
+ */
 export interface ICommandLine {
+
+    /**
+     * Called when message needs to be parsed.
+     * @param {IMessage} message Original message that need to be parsed.
+     * 
+     * @memberOf ICommandLine
+     */
     parseMessage(message: IMessage);
+
+
+    /**
+     * Subscription for the bot commands.
+     * @param {string} command Command name that was passed to bot(equals to first word in message where bot mentioned).
+     * @param {(source:IMessage, params:string[]) => any} listener Command listener function.
+     * @returns {this}
+     * 
+     * @memberOf ICommandLine
+     */
     on(command: string, listener: (source:IMessage, params:string[]) => any): this;
 }
 
+/**
+ * Class used as parser for messages addressed to bot.
+ * @export
+ * @class CommandLine
+ * @extends {events.EventEmitter}
+ * @implements {ICommandLine}
+ */
 export class CommandLine extends events.EventEmitter implements ICommandLine {
+    /**
+     * Pegjs-powered grammatic parser.
+     * @private
+     * @type {pegjs.Parser}
+     * @memberOf CommandLine
+     */
     private parser: pegjs.Parser;
+    
+    /**
+     * Commands help info.
+     * @private
+     * @type {string}
+     * @memberOf CommandLine
+     */
     private commands: string = "";    
 
+    /**
+     * Creates an instance of CommandLine.
+     * 
+     * @param {ManagerBot} manager Messaging manager for message sending.
+     * 
+     * @memberOf CommandLine
+     */
     constructor(protected manager: ManagerBot) {
         super();
         this.parser = pegjs.generate(fs.readFileSync(GRAMMAR_PATH).toString());
@@ -30,6 +79,12 @@ export class CommandLine extends events.EventEmitter implements ICommandLine {
         });
     }
 
+    /**
+     * Called when message needs to be parsed.
+     * @param {IMessage} message Original message that need to be parsed.
+     * 
+     * @memberOf CommandLine
+     */
     parseMessage(message: IMessage) {
         try {
             var parsedMessage = this.parser.parse(message.Text);
@@ -44,6 +99,13 @@ export class CommandLine extends events.EventEmitter implements ICommandLine {
         });
     }
 
+    /**
+     * Used to register command at bot help index.
+     * 
+     * @param {string} name Command name to register.
+     * 
+     * @memberOf CommandLine
+     */
     public registerCommand(name: string) {
         this.commands += this.commands == "" ? name : ', ' + name;
     }
