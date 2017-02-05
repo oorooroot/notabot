@@ -26,8 +26,15 @@ export class YouTube extends ContentService {
 
     constructor(protected subscriptions: Subscriptions, protected cmd: CommandLine, protected manager: ManagerBot) {
         super(cmd, '*/3 * * * *');
+        
+        try {
+            var credentials = JSON.parse(fs.readFileSync(CREDENTIALS_PATH).toString());
+        }
+        catch(err) {
+            Log.write(`Failed to load ${this.serviceType} credentials, not initialized!`, err);
+            return;
+        }
 
-        var credentials = JSON.parse(fs.readFileSync(CREDENTIALS_PATH).toString());
         var jwtClient = new google.auth.JWT(credentials.client_email, null, credentials.private_key, ["https://www.googleapis.com/auth/youtube"], null);
         this.youtube = google.youtube('v3');
 

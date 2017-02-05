@@ -32,7 +32,13 @@ export class DiscordBot extends event.EventEmitter implements IBot {
         super();
 
         this.client = new discord.Client();
-        this.credentials = JSON.parse(fs.readFileSync(CREDENTIALS_PATH).toString());
+        try {
+            this.credentials = JSON.parse(fs.readFileSync(CREDENTIALS_PATH).toString());
+        }
+        catch(err) {
+            Log.write(`Failed to load discord credentials, not initialized!`, err);
+            return;
+        }
 
         this.client.on('ready', () => {
             Log.write('Discord bot connected to server successfully.');

@@ -22,7 +22,13 @@ export class Tumblr extends ContentService {
     constructor(protected subscriptions: Subscriptions, protected cmd: CommandLine, protected manager: ManagerBot) {
         super(cmd, '*/3 * * * *');
 
-        var credentials = JSON.parse(fs.readFileSync(CREDENTIALS_PATH).toString());
+        try {
+            var credentials = JSON.parse(fs.readFileSync(CREDENTIALS_PATH).toString());
+        }
+        catch(err) {
+            Log.write(`Failed to load ${this.serviceType} credentials, not initialized!`, err);
+            return;
+        }
 
         this.client = new tumblr.createClient({ consumer_key: credentials.consumer_key });
 

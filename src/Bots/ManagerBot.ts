@@ -1,9 +1,25 @@
 import { Map } from "../Utils/Map";
 import { Log } from "../Utils/Log";
+import { Exception } from "../Utils/Exception";
 import { IBot } from "./IBot";
 import { IMessage } from "./IMessage";
 import * as schedule from 'node-schedule';
 import * as events from 'events';
+import * as process from 'process';
+
+export class MessageSendException extends Exception {
+    constructor(message?: string) {
+        super(message);
+        this.name = 'MessageSendException';
+    }    
+} 
+
+export class BotManagerException extends Exception {
+    constructor(message?: string) {
+        super(message);
+        this.name = 'BotManagerException';
+    }    
+} 
 
 enum OutgoingMessageType {
     Message,
@@ -28,7 +44,8 @@ interface ResendOptions {
     date?: Date;
 }
 
-const MESSAGE_RESEND_PERIOD: number = 60 * 1000;
+var MESSAGE_RESEND_PERIOD: number =  60 * 1000; 
+if(process.env.NODE_ENV === 'testing') { MESSAGE_RESEND_PERIOD =  2 * 1000; }
 
 export class ManagerBot extends events.EventEmitter {
     private botList: Map<IBot> = new Map<IBot>();
@@ -38,6 +55,7 @@ export class ManagerBot extends events.EventEmitter {
         super();
 
         schedule.scheduleJob('* * * * * *', () => {
+            Log.write(`Schedule fired!`);
             this.processMessageQueue();
         });
     }
@@ -47,16 +65,17 @@ export class ManagerBot extends events.EventEmitter {
             var message = this.messageQueue.shift();
             var delay = Math.abs((new Date()).getTime() - message.date.getTime());
 
+
             if(delay > MESSAGE_RESEND_PERIOD) {
-                message.reject("Message resend timeout!");
+                message.reject(new MessageSendException("Message resend timeout!"));
                 continue;
             }
 
             Log.write(`Resending message: ${message.type} ${message.text} ${message.attachment}`);
 
-            if(message.type == OutgoingMessageType.Message) this.resendMessage(message);
-            else if(message.type == OutgoingMessageType.Reply) this.resendReply(message);
-            else if(message.type == OutgoingMessageType.File) this.resendFile(message);
+            if(message.type == OutgoingMessageType.Message) process.nextTick(() => { this.resendMessage(message) });
+            else if(message.type == OutgoingMessageType.Reply) process.nextTick(() => { this.resendReply(message) });
+            else if(message.type == OutgoingMessageType.File) process.nextTick(() => { this.resendFile(message) });
         }
     }
 
@@ -114,7 +133,7 @@ export class ManagerBot extends events.EventEmitter {
         });
     }
 
-    resendMessage(message: MessageQueueItem) {
+    private resendMessage(message: MessageQueueItem) {
          var bot = this.botList[message.botID];
          if(!bot) this.messageQueue.push(message);
          else {
@@ -167,7 +186,7 @@ export class ManagerBot extends events.EventEmitter {
         });
     }
 
-    resendFile(message: MessageQueueItem) {
+    private resendFile(message: MessageQueueItem) {
          var bot = this.botList[message.botID];
          if(!bot) this.messageQueue.push(message);
          else {
@@ -220,7 +239,7 @@ export class ManagerBot extends events.EventEmitter {
         });
     }
 
-    resendReply(message: MessageQueueItem) {
+    private resendReply(message: MessageQueueItem) {
          var bot = this.botList[message.botID];
          if(!bot) this.messageQueue.push(message);
          else {
@@ -235,6 +254,8 @@ export class ManagerBot extends events.EventEmitter {
     }
 
     checkMessagePermissions(sourceMessage: IMessage, permission: string): Promise<boolean> {
+        if(!sourceMessage) return Promise.reject(new BotManagerException('Message is not defined!'));
+
         var bot = this.botList[sourceMessage.BotID];
 
         return new Promise<boolean>((resolve, reject) => {

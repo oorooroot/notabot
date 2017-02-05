@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha -r ts-node/register tests/**/*.test.ts"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +21,10 @@
     "tumblr.js": "^1.1.1"
   },
   "devDependencies": {
-    "reflect-metadata": "^0.1.9"
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0",
+    "reflect-metadata": "^0.1.9",
+    "ts-node": "^2.0.0",
+    "typescript": "^2.1.5"
   }
 }
