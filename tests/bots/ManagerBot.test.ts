@@ -11,6 +11,13 @@ class MockMessage implements IMessage {
     NativeMessage = {};
 }
 
+class MockMessage2 implements IMessage {
+    BotID = 'test2';
+    ChannelID = 'foo';
+    Text = 'bar';
+    NativeMessage = {};
+}
+
 export class MockBot extends event.EventEmitter implements IBot {
     ID:string;
 
@@ -77,6 +84,7 @@ const manager = new ManagerBot();
 const mockBot = new MockBot();
 const mockBotResend = new MockBot2();
 const mockMessage = new MockMessage();
+const mockMessageResend = new MockMessage2();
 
 describe('Manager Bot', () => {
   it('Should be empty at startup', () => {
@@ -137,7 +145,7 @@ describe('Manager Bot', () => {
     return Promise.all([
       manager.sendMessage('test2', 'bar', 'baz'),
       manager.sendFile('test2', 'bar', 'baz'),
-      manager.replyMessage(mockMessage, 'bar')
+      manager.replyMessage(mockMessageResend, 'bar')
     ]);
   });
   

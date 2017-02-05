@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "test": "mocha -r ts-node/register tests/**/*.test.ts"
+    "test": "set NODE_ENV=testing&& mocha -r ts-node/register tests/**/*.test.ts -t 25000"
   },
   "keywords": [],
   "author": "",

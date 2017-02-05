@@ -55,7 +55,6 @@ export class ManagerBot extends events.EventEmitter {
         super();
 
         schedule.scheduleJob('* * * * * *', () => {
-            Log.write(`Schedule fired!`);
             this.processMessageQueue();
         });
     }
