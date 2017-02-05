@@ -88,27 +88,6 @@ export class Twitch extends ContentService {
                     });
                 });
             });
-        // .then(items => {
-        //     return this.getStream(type, params)
-        //         .then(data => {
-        //             if (data.stream) {
-        //                 items.push({
-        //                     publishedAt: new Date(data.stream.created_at),
-        //                     videoId: data.stream.channel.url,
-        //                     title: data.stream.game,
-        //                     channelTitle: data.stream.channel.display_name,
-        //                     channelId: params.channelId,
-        //                     type: ContentItemType.stream
-        //                 });
-        //             }
-
-        //             return items;
-        //         })
-        // });
-    }
-
-    private getStream(type: string, params: any): Promise<{ stream?: any }> {
-        return this.rest.get(`https://api.twitch.tv/kraken/streams/${params.channelId}`, { headers: this.headers })
     }
 
     private getItemsRecursively(type: string, params: any, callback: (err: any, items: IContentItem[]) => void, currentData?: { videos: IContentItem[] }, offset?: number) {

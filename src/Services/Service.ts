@@ -39,7 +39,7 @@ export interface IContentItem {
     publishedAt: Date;
     videoId: string;
     title: string;
-    type: ContentItemType;
+    type: ContentItemType | string;
     channelTitle?: string;
 }
 

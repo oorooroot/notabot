@@ -11,6 +11,7 @@ import { TyanGenerator } from './Services/TyanGenerator';
 import { Gestures } from './Services/Gestures';
 import { YouTube } from './Services/YouTube';
 import { Twitch } from './Services/Twitch';
+import { Tumblr } from './Services/Tumblr';
 import { DeviantArt } from './Services/DeviantArt';
 
 var manager = new ManagerBot();
@@ -30,3 +31,4 @@ var subscriptions = new Subscriptions(db);
 var youtube = new YouTube(subscriptions, cmd, manager);
 var twitch = new Twitch(subscriptions, cmd, manager, rest);
 var deviantart = new DeviantArt(subscriptions, cmd, manager);
+var tumblr = new Tumblr(subscriptions, cmd, manager);
