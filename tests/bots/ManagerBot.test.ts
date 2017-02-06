@@ -143,11 +143,13 @@ describe('Manager Bot', () => {
   it('Should resend any message type successfully', () => {
     manager.addBot(mockBotResend);
     mockBotResend.emitOnline();
-    return Promise.all([
-      manager.sendMessage('test2', 'bar', 'baz'),
-      manager.sendFile('test2', 'bar', 'baz'),
-      manager.replyMessage(mockMessageResend, 'bar')
-    ]);
+    
+    return manager.sendMessage('test2', 'bar', 'baz')
+    .then(() => {
+      return manager.sendFile('test2', 'bar', 'baz');
+    })
+    .then(() => {
+      return manager.replyMessage(mockMessageResend, 'bar');
+    });
   });
-  
 });

@@ -6,11 +6,18 @@
         "sourceMap": true,
         "experimentalDecorators": true,
         "types": [
-            "node"
+            "node",
+            "sqlite3",
+            "mocha",
+            "chai",
+            "pegjs",
+            "request"
+        ],
+        "typeRoots": [
+            "node_modules/@types"
         ]
     },
     "exclude": [
-        "node_modules",
-        "tests"
+        "node_modules"
     ]
 }
