@@ -10,7 +10,8 @@ import { ManagerBot } from "../Bots/ManagerBot";
 import { IMessage } from "../Bots/IMessage";
 import * as fs from 'fs';
 import * as schedule from 'node-schedule';
-import * as tumblr from 'tumblr.js';
+
+let tumblr = require('tumblr.js');
 
 const CREDENTIALS_PATH = __dirname + "/Credentials/tumblr_secret.json";
 
