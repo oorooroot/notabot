@@ -4,3 +4,5 @@ node_js:
 before_script:
   - npm i -g typescript
   - tsc
+notifications:
+  webhooks: DISCORD_HOOK
