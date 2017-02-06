@@ -50,6 +50,8 @@ export class MockBot extends event.EventEmitter implements IBot {
 export class MockBot2 extends event.EventEmitter implements IBot {
     ID:string;
     counter = 0;
+    counter1 = 0;
+    counter2 = 0;
     constructor() {
       super();
     }
@@ -58,19 +60,18 @@ export class MockBot2 extends event.EventEmitter implements IBot {
 
     }
     sendMessage(channelID: string, text: string, options?: any): Promise<any> {
-        if(this.counter % 2 == 0) { this.counter++; return Promise.reject(null); }
+        if(this.counter % 2 === 0) { this.counter++; return Promise.reject(null); }
         return Promise.resolve(null);
     }
     replyMessage(sourceMessage:IMessage, text: string, options?: any): Promise<any> {
-        if(this.counter % 2 == 0) { this.counter++; return Promise.reject(null); }
+        if(this.counter1 % 2 === 0) { this.counter1++; return Promise.reject(null); }
         return Promise.resolve(null);
     }
     sendFile(channelID: string, attachment: string, text?:string): Promise<any> {
-        if(this.counter % 2 == 0) { this.counter++; return Promise.reject(null); }
+        if(this.counter2 % 2 === 0) { this.counter2++; return Promise.reject(null); }
         return Promise.resolve(null);
     }
     checkMessagePermissions(message:IMessage, permission: string): Promise<boolean> {
-        if(this.counter % 2 == 0) { this.counter++; return Promise.reject(null); }
         return Promise.resolve(null);
     }
 
@@ -139,7 +140,7 @@ describe('Manager Bot', () => {
     .catch(err => { done(); });
   });
 
-  it('Should resend any type successfully', () => {
+  it('Should resend any message type successfully', () => {
     manager.addBot(mockBotResend);
     mockBotResend.emitOnline();
     return Promise.all([
