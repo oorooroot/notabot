@@ -5,7 +5,7 @@ before_script:
 - npm i -g typescript
 - tsc
 deploy:
-  app: nota-bot
+  app: notabot
   provider: heroku
   api_key:
     secure: NOOs7IQcLaTom8J34LOKjPETW3gItb4d6FBXXMLtEewpbQQ6eJvUIXP1k0LeUFZPPXsfJq8xUXhLNX/923+I3WOKKMdhqskCdbe9kzDI+xXZV072saNRBsdVjfyS2D2CBueHNOgjphiBQ0jnTPSfX9gTYF2zHZzcypZWD/ElvrzwGSR3RCK0G1+snefFEEqTFxeTd3vkZ+Y8Cd9LCaexfTtlfsK8RupBEtqrhKJfEx1FZujid1sr+iLX2KW2W8Z0weLyejN2MrlYQ7ZfF9PAOEA5YMC9XObJvhnW82/VgM0cNHcHf5DDAwijhpIc0IBOR00w+B18/nHtjYCEYnCqT+o+DQsS9JdHmXrwqoaCzjFB6lR5Fq4/+N37PfqVE5PDULQYi+X4X47RnVWMUvVOdulABXIxHs7IcHw6dMnUpaMX5exkC3rcVW7IOqbs3+/EmgpNm6QqUeopu2i9/An+IsRewwjmL4o8y1OR13XmlV1PKPulWt8M4xxISTLkzuZIozXrxXCyResIag4K5Dbo1RhAgPzQVtek3NvWoMtRBWp/CRqJaRelhIXOjG3F5cI+PyXnW/zMpQh+0cD6WGHNU+jREW7GIbmZuyoZFhjveaI6Sj0E3+y2nlssMZJ5BRIg49XbbKG6aWIJgb+/XoMNcRgJxTj+6rMP0lXIZzVbqLI=
