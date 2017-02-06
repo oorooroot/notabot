@@ -8,7 +8,6 @@ import { Helpers } from "../Utils/Helpers";
 import { ISubscriptionsData, Subscriptions } from "./Subscriptions";
 import { ManagerBot } from "../Bots/ManagerBot";
 import { IMessage } from "../Bots/IMessage";
-import * as fs from 'fs';
 import * as request from 'request';
 import * as schedule from 'node-schedule';
 

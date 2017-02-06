@@ -11,7 +11,8 @@
             "mocha",
             "chai",
             "pegjs",
-            "request"
+            "request",
+            "dotenv"
         ],
         "typeRoots": [
             "node_modules/@types"

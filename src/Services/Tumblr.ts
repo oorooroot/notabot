@@ -8,12 +8,10 @@ import { Helpers } from "../Utils/Helpers";
 import { ISubscriptionsData, Subscriptions } from "./Subscriptions";
 import { ManagerBot } from "../Bots/ManagerBot";
 import { IMessage } from "../Bots/IMessage";
-import * as fs from 'fs';
+import * as process from 'process';
 import * as schedule from 'node-schedule';
 
 let tumblr = require('tumblr.js');
-
-const CREDENTIALS_PATH = __dirname + "/Credentials/tumblr_secret.json";
 
 export class Tumblr extends ContentService {
     protected serviceType = 'tumblr';
@@ -23,15 +21,12 @@ export class Tumblr extends ContentService {
     constructor(protected subscriptions: Subscriptions, protected cmd: CommandLine, protected manager: ManagerBot) {
         super(cmd, '*/3 * * * *');
 
-        try {
-            var credentials = JSON.parse(fs.readFileSync(CREDENTIALS_PATH).toString());
-        }
-        catch(err) {
-            Log.write(`Failed to load ${this.serviceType} credentials, not initialized!`, err);
+        if(!process.env.TUMBLR_KEY) {
+            Log.write(`Failed to load ${this.serviceType} credentials, not initialized!`);
             return;
         }
 
-        this.client = new tumblr.createClient({ consumer_key: credentials.consumer_key });
+        this.client = new tumblr.createClient({ consumer_key: process.env.TUMBLR_KEY });
 
         this.initializeService();
     }

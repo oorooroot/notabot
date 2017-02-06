@@ -8,10 +8,8 @@ import { Helpers } from "../Utils/Helpers";
 import { ISubscriptionsData, Subscriptions } from "./Subscriptions";
 import { ManagerBot } from "../Bots/ManagerBot";
 import { IMessage } from "../Bots/IMessage";
-import * as fs from 'fs';
 import * as schedule from 'node-schedule';
-
-const CREDENTIALS_PATH = __dirname + "/Credentials/twitch_secret.json";
+import * as process from 'process';
 
 export class Twitch extends ContentService {
     protected serviceType = 'twitch';
@@ -21,15 +19,12 @@ export class Twitch extends ContentService {
     constructor(protected subscriptions: Subscriptions, protected cmd: CommandLine, protected manager: ManagerBot, protected rest: RestClient) {
         super(cmd, '*/3 * * * *');
 
-        try {
-            var credentials = JSON.parse(fs.readFileSync(CREDENTIALS_PATH).toString());
-        }
-        catch(err) {
-            Log.write(`Failed to load ${this.serviceType} credentials, not initialized!`, err);
+        if(!process.env.TWITCH_KEY) {
+            Log.write(`Failed to load ${this.serviceType} credentials, not initialized!`);
             return;
         }
 
-        this.headers["Client-ID"] = credentials.client_id;
+        this.headers["Client-ID"] = process.env.TWITCH_KEY;
         this.initializeService();
     }
 

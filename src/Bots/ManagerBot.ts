@@ -81,6 +81,9 @@ export class ManagerBot extends events.EventEmitter {
     addBot(bot: IBot) {
         if(bot.ID) this.botList[bot.ID] = bot;
 
+        bot.on("error", (err) => {
+            Log.write(err);
+        });
         bot.on("online", (bot, botID) => {
             this.botList[botID] = bot;
         });

@@ -6,11 +6,10 @@ import { Helpers } from "../Utils/Helpers";
 import { ISubscriptionsData, Subscriptions } from "./Subscriptions";
 import { ManagerBot } from "../Bots/ManagerBot";
 import { IMessage } from "../Bots/IMessage";
-import * as fs from 'fs';
+import * as process from 'process';
 
 let google = require('googleapis');
 
-const CREDENTIALS_PATH = __dirname + "/Credentials/youtube_secret.json";
 type YoutubeResponsePart = "id" | "snippet";
 
 export class YouTube extends ContentService {
@@ -27,15 +26,15 @@ export class YouTube extends ContentService {
     constructor(protected subscriptions: Subscriptions, protected cmd: CommandLine, protected manager: ManagerBot) {
         super(cmd, '*/3 * * * *');
         
-        try {
-            var credentials = JSON.parse(fs.readFileSync(CREDENTIALS_PATH).toString());
-        }
-        catch(err) {
-            Log.write(`Failed to load ${this.serviceType} credentials, not initialized!`, err);
+        if(!process.env.YOUTUBE_EMAIL || !process.env.YOUTUBE_PRIVATE_KEY) {
+            Log.write(`Failed to load ${this.serviceType} credentials, not initialized!`);
             return;
         }
+        
+        // new line hack, must find another way to do it
+        var keyObject = JSON.parse(`{ "key": "${process.env.YOUTUBE_PRIVATE_KEY}" }`);
 
-        var jwtClient = new google.auth.JWT(credentials.client_email, null, credentials.private_key, ["https://www.googleapis.com/auth/youtube"], null);
+        var jwtClient = new google.auth.JWT(process.env.YOUTUBE_EMAIL, null, keyObject.key, ["https://www.googleapis.com/auth/youtube"], null);
         this.youtube = google.youtube('v3');
 
         jwtClient.authorize((err, tokens) => {

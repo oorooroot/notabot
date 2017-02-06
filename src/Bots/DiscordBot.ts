@@ -3,10 +3,7 @@ import { IMessage } from "./IMessage";
 import { Log } from "../Utils/Log";
 import * as event from 'events';
 import * as discord from 'discord.js';
-import * as fs from 'fs';
-import * as util from 'util';
 
-const CREDENTIALS_PATH = __dirname + "/Credentials/discord.json";
 const PERMISSIONS = {
         admin: "ADMINISTRATOR",
         user: "SEND_MESSAGES"
@@ -19,7 +16,7 @@ enum OutgoingMessageType {
 }
 
 export class DiscordBot extends event.EventEmitter implements IBot {
-    private credentials: { token: string } ;
+    private token: string;
     private client: discord.Client; 
     private uid: string;
     private messageQueue: { type: OutgoingMessageType, context: any, text: string, options?:any }[] = [];
@@ -32,14 +29,16 @@ export class DiscordBot extends event.EventEmitter implements IBot {
         super();
 
         this.client = new discord.Client();
-        try {
-            this.credentials = JSON.parse(fs.readFileSync(CREDENTIALS_PATH).toString());
-        }
-        catch(err) {
-            Log.write(`Failed to load discord credentials, not initialized!`, err);
+        if(!process.env.DISCORD_TOKEN) {
+            Log.write(`Failed to load discord credentials, not initialized!`);
             return;
         }
+        
+        this.token = process.env.DISCORD_TOKEN;
 
+        this.client.on('error', (err) => {
+		    this.emit('error', err);
+        });
         this.client.on('ready', () => {
             Log.write('Discord bot connected to server successfully.');
             
@@ -60,7 +59,7 @@ export class DiscordBot extends event.EventEmitter implements IBot {
     }
 
     public connect() {
-        this.client.login(this.credentials.token);
+        this.client.login(this.token);
     }
     
     private typeMessage(channelID: string, delay: number): Promise<void> {

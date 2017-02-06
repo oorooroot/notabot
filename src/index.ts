@@ -1,3 +1,5 @@
+import * as dotenv from 'dotenv';
+
 import { ManagerBot } from './Bots/ManagerBot';
 import { DiscordBot } from './Bots/DiscordBot';
 
@@ -13,6 +15,8 @@ import { YouTube } from './Services/YouTube';
 import { Twitch } from './Services/Twitch';
 import { Tumblr } from './Services/Tumblr';
 import { DeviantArt } from './Services/DeviantArt';
+
+dotenv.config();
 
 var manager = new ManagerBot();
 var cmd = new CommandLine(manager);
