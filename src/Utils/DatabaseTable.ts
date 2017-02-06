@@ -1,6 +1,6 @@
 import { Database } from "./Database";
-import { Log } from "../utils/Log";
-import { Map } from "../utils/Map";
+import { Log } from "./Log";
+import { Map } from "./Map";
 
 import "reflect-metadata";
 
