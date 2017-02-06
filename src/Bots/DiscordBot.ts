@@ -25,10 +25,10 @@ export class DiscordBot extends event.EventEmitter implements IBot {
         return this.uid;
     }
 
-    constructor() {
+    constructor(client: discord.Client) {
         super();
 
-        this.client = new discord.Client();
+        this.client = client;
         if(!process.env.DISCORD_TOKEN) {
             Log.write(`Failed to load discord credentials, not initialized!`);
             return;

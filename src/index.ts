@@ -16,13 +16,15 @@ import { Twitch } from './Services/Twitch';
 import { Tumblr } from './Services/Tumblr';
 import { DeviantArt } from './Services/DeviantArt';
 
+import * as discord from 'discord.js';
+
 dotenv.config();
 
 var manager = new ManagerBot();
 var cmd = new CommandLine(manager);
 var rest = new RestClient();
 
-var discordBot = new DiscordBot();
+var discordBot = new DiscordBot(new discord.Client());
 manager.addBot(discordBot);
 
 discordBot.connect();
