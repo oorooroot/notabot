@@ -1,6 +1,6 @@
-import { ManagerBot } from '../../src/bots/ManagerBot';
-import { IBot } from '../../src/bots/IBot';
-import { IMessage } from '../../src/bots/IMessage';
+import { ManagerBot } from '../../src/Bots/ManagerBot';
+import { IBot } from '../../src/Bots/IBot';
+import { IMessage } from '../../src/Bots/IMessage';
 import { expect } from 'chai';
 import * as event from 'events';
 
