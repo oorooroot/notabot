@@ -1,6 +1,6 @@
 import * as sqlite from 'sqlite3';
 import * as util from 'util';
-import * as path from 'path';
+import * as process from 'process';
 import { Log } from './Log';
 import { Exception } from './Exception';
 
@@ -10,7 +10,7 @@ export class Database {
     private db: sqlite.Database;
 
     constructor(private filename: string) {
-        this.db = new sqlite.Database(path.join(__dirname, filename));
+        this.db = new sqlite.Database(process.env.DB_PATH);
     }
     
     exec(sql:string): Promise<void> {

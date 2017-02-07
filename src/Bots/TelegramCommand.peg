@@ -1,0 +1,43 @@
+Expressions
+	= e:Expression+ {
+    	return { query: e };
+        
+    }
+
+Expression 
+	= command:Command mention:MentionWrap parameters:Parameters{
+        return {command, mention: mention.length > 0 ? mention[0]: null , parameters};
+	}
+
+Parameters
+	= head:(Parameter _)*{
+    	var result = [], i;
+        for(i = 0; i < head.length; i++)
+        {
+        	result.push(head[i][0]);
+        }
+        return result;       
+    }
+    
+Parameter
+	=  head:[^ ^\t^\n^\r]+{
+       return head.join("");
+    }
+
+MentionWrap 
+	= m:Mention* {
+    	return m;
+    }
+
+Mention
+    = "@" head:([a-zA-Z0-9\-\_]+) _ {
+      return head.join("");
+    }
+    
+Command 
+	= "/" head:([a-zA-Zа-яА-Я]+) _ {
+       return head.join("");
+	}
+    
+_ "whitespace"
+  = [ \t\n\r]*

@@ -1,7 +1,9 @@
 import { IMessage } from "./IMessage";
+import * as pegjs from 'pegjs';
 
 export interface IBot {
     ID:string;
+    CommandParser: pegjs.Parser;
 
     connect();
     sendMessage(channelID: string, text: string, options?: any): Promise<any>;

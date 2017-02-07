@@ -1,14 +1,11 @@
 import * as util from 'util';
 import * as events from 'events';
-import * as pegjs from 'pegjs';
-import * as fs from 'fs';
 import { Log } from './Log';
 import { Map } from './Map';
 import { Exception } from './Exception';
 import { IMessage } from '../Bots/IMessage';
+import { IBot } from '../Bots/IBot';
 import { ManagerBot } from '../Bots/ManagerBot';
-
-const GRAMMAR_PATH = __dirname + "/CommandLine.peg";
 
 /**
  * Interface for command line parser.
@@ -23,7 +20,7 @@ export interface ICommandLine {
      * 
      * @memberOf ICommandLine
      */
-    parseMessage(message: IMessage);
+    parseMessage(bot: IBot, message: IMessage);
 
 
     /**
@@ -45,13 +42,6 @@ export interface ICommandLine {
  * @implements {ICommandLine}
  */
 export class CommandLine extends events.EventEmitter implements ICommandLine {
-    /**
-     * Pegjs-powered grammatic parser.
-     * @private
-     * @type {pegjs.Parser}
-     * @memberOf CommandLine
-     */
-    private parser: pegjs.Parser;
     
     /**
      * Commands help info.
@@ -70,7 +60,6 @@ export class CommandLine extends events.EventEmitter implements ICommandLine {
      */
     constructor(protected manager: ManagerBot) {
         super();
-        this.parser = pegjs.generate(fs.readFileSync(GRAMMAR_PATH).toString());
 
         this.manager.on("message", this.parseMessage.bind(this));
 
@@ -85,9 +74,9 @@ export class CommandLine extends events.EventEmitter implements ICommandLine {
      * 
      * @memberOf CommandLine
      */
-    parseMessage(message: IMessage) {
+    parseMessage(bot: IBot, message: IMessage) {
         try {
-            var parsedMessage = this.parser.parse(message.Text);
+            var parsedMessage = bot.CommandParser.parse(message.Text);
         }
         catch(error) {
             Log.write("CommandLine parsing error:", message.Text, error);

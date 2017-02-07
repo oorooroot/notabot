@@ -3,6 +3,8 @@ import { IMessage } from "./IMessage";
 import { Log } from "../Utils/Log";
 import * as event from 'events';
 import * as discord from 'discord.js';
+import * as pegjs from 'pegjs';
+import * as fs from 'fs';
 
 const PERMISSIONS = {
         admin: "ADMINISTRATOR",
@@ -15,19 +17,27 @@ enum OutgoingMessageType {
     File
 }
 
+const GRAMMAR_PATH = __dirname + "/DiscordCommand.peg";
+
 export class DiscordBot extends event.EventEmitter implements IBot {
     private token: string;
     private client: discord.Client; 
     private uid: string;
-    private messageQueue: { type: OutgoingMessageType, context: any, text: string, options?:any }[] = [];
+    private commandParser: pegjs.Parser;
 
     get ID():string {
         return this.uid;
     }
 
+    get CommandParser(): pegjs.Parser {
+        return this.commandParser;
+    }
+    
     constructor(client: discord.Client) {
         super();
 
+        this.commandParser = pegjs.generate(fs.readFileSync(GRAMMAR_PATH).toString());
+        
         this.client = client;
         if(!process.env.DISCORD_TOKEN) {
             Log.write(`Failed to load discord credentials, not initialized!`);
@@ -53,7 +63,7 @@ export class DiscordBot extends event.EventEmitter implements IBot {
         this.client.on('message', (message) => {
             if(message.author != this.client.user && message.isMentioned(this.client.user))
             {
-                this.emit('message', new DiscordMessage(message));
+                this.emit('message', this, new DiscordMessage(message));
             }
         });
     }

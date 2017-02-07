@@ -87,8 +87,8 @@ export class ManagerBot extends events.EventEmitter {
         bot.on("online", (bot, botID) => {
             this.botList[botID] = bot;
         });
-        bot.on("message", (message) => {
-            this.emit("message", message);
+        bot.on("message", (bot, message) => {
+            this.emit("message", bot, message);
         });
     }
 

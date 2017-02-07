@@ -2,6 +2,7 @@ import * as dotenv from 'dotenv';
 
 import { ManagerBot } from './Bots/ManagerBot';
 import { DiscordBot } from './Bots/DiscordBot';
+import { TelegramBot } from './Bots/TelegramBot';
 
 import { Database } from './Utils/Database';
 import { CommandLine } from './Utils/CommandLine';
@@ -26,8 +27,11 @@ var rest = new RestClient();
 
 var discordBot = new DiscordBot(new discord.Client());
 manager.addBot(discordBot);
-
 discordBot.connect();
+
+var telegramBot = new TelegramBot();
+manager.addBot(telegramBot);
+telegramBot.connect();
 
 var db = new Database("Database.db");
 var tyanGenerator = new TyanGenerator(db, cmd, manager);
