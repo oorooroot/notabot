@@ -98,7 +98,8 @@ export class Gestures extends DatabaseTable {
         .then(
             activeSessions => {
                 if(!activeSessions || activeSessions.length == 0) {
-                    this.getGestureData(source.Text)
+                    var command = "gesture " + params.join(' ');
+                    this.getGestureData(command)
                     .then(gestureDataRes => { gestureData = gestureDataRes; })
                     .then(() => { return this.subscribeGesturePreset(source.BotID, source.ChannelID, gestureData.timelimit)})
                     .then(() => { this.manager.sendMessage(source.BotID, source.ChannelID, "Ok! Just get ready for drawing, in 10 seconds..."); })
