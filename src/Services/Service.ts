@@ -63,12 +63,12 @@ export abstract class ContentService extends Service {
         super();
 
         cmd.on('subscribe', (source: IMessage, params: string[]) => {
-            if (params[0] && !this.urlBelongsToService(params[0])) return;
+            if (!params[0] || !this.urlBelongsToService(params[0])) return;
             this.proccessCommand('subscribe', source, params);
         });
 
         cmd.on('unsubscribe', (source: IMessage, params: string[]) => {
-            if (params[0] && !this.urlBelongsToService(params[0])) return;
+            if (!params[0] || !this.urlBelongsToService(params[0])) return;
             this.proccessCommand('unsubscribe', source, params);
         });
 
