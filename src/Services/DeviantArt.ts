@@ -107,7 +107,16 @@ export class DeviantArt extends ContentService {
                                 title: submission.title,
                                 channelTitle: params.channelId,
                                 channelId: params.channelId,
-                                type: ContentItemType.image
+                                type: ContentItemType.image,
+                                options: {
+                                    embed: {
+                                        title: submission.title,
+                                        url: submission.link,
+                                        image: {
+                                            url: submission.image.url 
+                                        }
+                                    }
+                                }
                             });
                         }
                     });

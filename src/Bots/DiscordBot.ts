@@ -84,12 +84,12 @@ export class DiscordBot extends event.EventEmitter implements IBot {
     sendMessage(channelID: string, text: string, options?: any): Promise<discord.Message | discord.Message[]> {
         let channel:any = this.client.channels.get(channelID);
         return this.typeMessage(channelID, 1500)
-        .then(() => { return channel.sendMessage(text); });
+        .then(() => { return channel.sendMessage(text, options); });
     }
 
     replyMessage(sourceMessage:IMessage, text: string, options?: any) : Promise<any> {
         return this.typeMessage(sourceMessage.ChannelID, 1500)
-        .then(() => { return (sourceMessage.NativeMessage as discord.Message).reply(text); });
+        .then(() => { return (sourceMessage.NativeMessage as discord.Message).reply(text, options); });
     }
 
     sendFile(channelID: string, attachment: string, text?:string) : Promise<discord.Message | discord.Message[]> {

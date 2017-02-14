@@ -40,6 +40,7 @@ export interface IContentItem {
     title: string;
     type: ContentItemType | string;
     channelTitle?: string;
+    options?: any;
 }
 
 export interface IContentSource {
@@ -52,10 +53,10 @@ export abstract class ContentService extends Service {
     protected abstract subscriptions: Subscriptions;
 
     protected commands: Map<{ role: string, f: (source: IMessage, args: string[]) => any }> = {
-        subscribe: { role: 'user', f: this.processSubscribeMessage.bind(this) },
+        subscribe: { role: 'admin', f: this.processSubscribeMessage.bind(this) },
         unsubscribe: { role: 'admin', f: this.processUnsubscribeMessage.bind(this) },
         refresh: { role: 'admin', f: this.processRefreshSubscriptions.bind(this) },
-        list: { role: 'user', f: this.processListSubscriptions.bind(this) }
+        list: { role: 'admin', f: this.processListSubscriptions.bind(this) }
     };
 
     constructor(manager: ManagerBot, updateSchedule: string, debug?:boolean) {
@@ -168,7 +169,7 @@ export abstract class ContentService extends Service {
                                 }
 
                                 return Promise.all([
-                                    this.manager.sendMessage(subscription.botId, subscription.botChannelId, message),
+                                    this.manager.sendMessage(subscription.botId, subscription.botChannelId, message, video.options),
                                     this.subscriptions.update({ serviceLastUpdate: video.publishedAt.toISOString() }, where)
                                 ]);
                             } else {
