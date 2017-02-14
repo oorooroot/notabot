@@ -57,7 +57,7 @@ export class TyanGenerator extends DatabaseTable {
         return this.db.select(TABLE_NAME, null, null, ["RANDOM()"], 1)
         .then(
             result => {
-                if(result) {
+                if(result && result.length > 0) {
                     return result[0].value;
                 }
                 else {

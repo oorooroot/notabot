@@ -14,7 +14,7 @@ import * as process from 'process';
 export class Twitch extends ContentService {
     protected serviceType = 'twitch';
     private headers = { Accept: "application/vnd.twitchtv.v3+json", "Client-ID": null };
-    private patternUser = new RegExp(/(?:http|https)+:\/\/(?:www\.|)twitch\.tv\/([a-zA-Z0-9_\-]+)(?:\/[a-zA-Z0-9_\-]+)*/i);
+    private patternUser = new RegExp(/(?:(?:http|https):\/\/){0,1}(?:www\.|){0,1}twitch\.tv\/([a-zA-Z0-9_\-]+)(?:\/[a-zA-Z0-9_\-]+)*/i);
 
     constructor(protected subscriptions: Subscriptions, protected cmd: CommandLine, protected manager: ManagerBot, protected rest: RestClient) {
         super(cmd, '*/3 * * * *');

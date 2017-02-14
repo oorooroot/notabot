@@ -17,9 +17,9 @@ export class YouTube extends ContentService {
     protected serviceType = 'youtube';
     protected updateSchedule = '*/3 * * * *';
 
-    private patternUser = new RegExp(/(?:http|https)+:\/\/(?:www\.|)youtube\.com\/user\/([a-zA-Z0-9_\-]+)/i);
-    private patternChannel = new RegExp(/(?:http|https)+:\/\/(?:www\.|)youtube\.com\/channel\/([a-zA-Z0-9_\-]+)/i);
-    private patternPlaylist = new RegExp(/(?:http|https)+:\/\/(?:www\.|)youtube\.com\/playlist\?list\=([a-zA-Z0-9_\-]+)/i);
+    private patternUser = new RegExp(/(?:(?:http|https):\/\/){0,1}(?:www\.|){0,1}youtube\.com\/user\/([a-zA-Z0-9_\-]+)/i);
+    private patternChannel = new RegExp(/(?:(?:http|https):\/\/){0,1}(?:www\.|){0,1}youtube\.com\/channel\/([a-zA-Z0-9_\-]+)/i);
+    private patternPlaylist = new RegExp(/(?:(?:http|https):\/\/){0,1}(?:www\.|){0,1}youtube\.com\/playlist\?list\=([a-zA-Z0-9_\-]+)/i);
     private types = { playlist: 'playlists', channel: 'channels' };
     private listTypes = { playlist: 'playlistItems', channel: 'activities' };
 

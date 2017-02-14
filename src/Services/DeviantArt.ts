@@ -15,7 +15,7 @@ let FeedParser = require('feedparser');
 
 export class DeviantArt extends ContentService {
     protected serviceType = 'deviantart';
-    private patternUser = new RegExp(/(?:http|https])*(?:\:\/\/)*([a-zA-Z0-9_\-]+)\.deviantart\.com(?:\/)*/i);
+    private patternUser = new RegExp(/(?:(?:http|https):\/\/){0,1}(?:www\.|){0,1}([a-zA-Z0-9_\-]+)\.deviantart\.com(?:\/)*/i);
 
     constructor(protected subscriptions: Subscriptions, protected cmd: CommandLine, protected manager: ManagerBot) {
         super(cmd, '*/5 * * * *');

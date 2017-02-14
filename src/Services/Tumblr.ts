@@ -16,7 +16,7 @@ let tumblr = require('tumblr.js');
 export class Tumblr extends ContentService {
     protected serviceType = 'tumblr';
     protected client: any;
-    private patternUser = new RegExp(/(?:http|https)+:\/\/(?:www\.|)([a-zA-Z0-9_\-]+).tumblr\.com(?:\/[a-zA-Z0-9_\-]+)*/i);
+    private patternUser = new RegExp(/(?:(?:http|https):\/\/){0,1}(?:www\.|){0,1}([a-zA-Z0-9_\-]+).tumblr\.com(?:\/[a-zA-Z0-9_\-]+)*/i);
 
     constructor(protected subscriptions: Subscriptions, protected cmd: CommandLine, protected manager: ManagerBot) {
         super(cmd, '*/3 * * * *');

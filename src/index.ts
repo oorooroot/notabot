@@ -16,10 +16,17 @@ import { YouTube } from './Services/YouTube';
 import { Twitch } from './Services/Twitch';
 import { Tumblr } from './Services/Tumblr';
 import { DeviantArt } from './Services/DeviantArt';
+import * as path from 'path';
+import * as process from 'process';
 
 import * as discord from 'discord.js';
 
-dotenv.config();
+if (process.env.NODE_ENV) 
+{
+    Log.write("Development environment loaded.");
+    dotenv.config({path: `.env.${process.env.NODE_ENV}`});
+}
+else dotenv.config({path: ".env.production"});
 
 var manager = new ManagerBot();
 var cmd = new CommandLine(manager);
