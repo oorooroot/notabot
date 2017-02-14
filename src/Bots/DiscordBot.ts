@@ -29,10 +29,6 @@ export class DiscordBot extends event.EventEmitter implements IBot {
         return this.uid;
     }
 
-    get CommandParser(): pegjs.Parser {
-        return this.commandParser;
-    }
-    
     constructor(client: discord.Client) {
         super();
 
@@ -61,9 +57,9 @@ export class DiscordBot extends event.EventEmitter implements IBot {
 		    this.emit('offline', this, this.uid);
         });
         this.client.on('message', (message) => {
-            if(message.author != this.client.user && message.isMentioned(this.client.user))
+            if(message.channel instanceof discord.DMChannel || (message.author != this.client.user && message.isMentioned(this.client.user)))
             {
-                this.emit('message', this, new DiscordMessage(message));
+                this.parseMessage(new DiscordMessage(message));
             }
         });
     }
@@ -112,6 +108,20 @@ export class DiscordBot extends event.EventEmitter implements IBot {
         
         var userPermissions = (discordMsg.channel as discord.TextChannel).permissionsFor(discordMsg.author);
         return Promise.resolve(userPermissions.hasPermission(PERMISSIONS[permission], true));
+    }
+
+    private parseMessage(message: IMessage) {
+        try {
+            var parsedMessage = this.commandParser.parse(message.Text);
+        }
+        catch(error) {
+            Log.write("CommandLine parsing error:", message.Text, error);
+            return;
+        }
+
+        parsedMessage.query.forEach((item, i, arr) => {
+            this.emit("command", item.command, message, item.parameters)
+        });
     }
 }
 

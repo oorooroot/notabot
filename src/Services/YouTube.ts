@@ -1,5 +1,4 @@
 import { ContentService, NotFoundException, IContentItem, IContentSource, ContentItemType } from "./Service";
-import { CommandLine } from "../Utils/CommandLine";
 import { Map } from "../Utils/Map";
 import { Log } from "../Utils/Log";
 import { Helpers } from "../Utils/Helpers";
@@ -23,8 +22,8 @@ export class YouTube extends ContentService {
     private types = { playlist: 'playlists', channel: 'channels' };
     private listTypes = { playlist: 'playlistItems', channel: 'activities' };
 
-    constructor(protected subscriptions: Subscriptions, protected cmd: CommandLine, protected manager: ManagerBot) {
-        super(cmd, '*/3 * * * *');
+    constructor(protected subscriptions: Subscriptions, protected manager: ManagerBot) {
+        super(manager, '*/3 * * * *');
         
         if(!process.env.YOUTUBE_EMAIL || !process.env.YOUTUBE_PRIVATE_KEY) {
             Log.write(`Failed to load ${this.serviceType} credentials, not initialized!`);

@@ -1,5 +1,4 @@
 import { ContentService, NotFoundException, IContentItem, IContentSource, ContentItemType } from "./Service";
-import { CommandLine } from "../Utils/CommandLine";
 import { Map } from "../Utils/Map";
 import { Exception } from "../Utils/Exception";
 import { Log } from "../Utils/Log";
@@ -16,8 +15,8 @@ export class Twitch extends ContentService {
     private headers = { Accept: "application/vnd.twitchtv.v3+json", "Client-ID": null };
     private patternUser = new RegExp(/(?:(?:http|https):\/\/){0,1}(?:www\.|){0,1}twitch\.tv\/([a-zA-Z0-9_\-]+)(?:\/[a-zA-Z0-9_\-]+)*/i);
 
-    constructor(protected subscriptions: Subscriptions, protected cmd: CommandLine, protected manager: ManagerBot, protected rest: RestClient) {
-        super(cmd, '*/3 * * * *');
+    constructor(protected subscriptions: Subscriptions, protected manager: ManagerBot, protected rest: RestClient) {
+        super(manager, '*/3 * * * *');
 
         if(!process.env.TWITCH_KEY) {
             Log.write(`Failed to load ${this.serviceType} credentials, not initialized!`);

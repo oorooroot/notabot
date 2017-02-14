@@ -1,6 +1,5 @@
 import { DatabaseTable, DatabaseDefinition } from "../Utils/DatabaseTable";
 import { Database, KeyValueArg, QueryResult, NoRowsAffectedDatabaseException } from "../Utils/Database";
-import { CommandLine } from "../Utils/CommandLine";
 import { ManagerBot } from "../Bots/ManagerBot";
 import { IMessage } from "../Bots/IMessage";
 import { Map } from "../Utils/Map";
@@ -45,18 +44,10 @@ export class Gestures extends DatabaseTable {
     };
 
     private activeTimelimits: GestureSessionData;
-    private help = `gesture command: gesture female|male|any nude|clothed|any [Nh] [Nm] [Ns]
-    example: gesture female clothed 2m 30s`;
 
-    constructor(protected db: Database, protected cmd: CommandLine, protected manager: ManagerBot) {
+    constructor(protected db: Database, protected manager: ManagerBot) {
         super(db, TABLE_NAME);
         this.initializeGestures();
-
-        this.cmd.registerCommand("gesture");
-    }
-
-    private proccessHelp(source:IMessage, params:string[]) {
-        this.manager.replyMessage(source, this.help);
     }
 
     private proccessCommand(command: string, source: IMessage, params: string[]) {
@@ -80,13 +71,11 @@ export class Gestures extends DatabaseTable {
         
         this.checkSessionsAtStartup();
 
-        this.cmd.on('гестура', (source: IMessage, params: string[]) => {
-            if(params[0] === 'help') this.proccessHelp(source, params);
-            else this.proccessCommand('gesture', source, params);
+        this.manager.on('гестура', (source: IMessage, params: string[]) => {
+            this.proccessCommand('gesture', source, params);
         });
-        this.cmd.on('gesture', (source: IMessage, params: string[]) => {
-            if(params[0] === 'help') this.proccessHelp(source, params);
-            else this.proccessCommand('gesture', source, params);
+        this.manager.on('gesture', (source: IMessage, params: string[]) => {
+            this.proccessCommand('gesture', source, params);
         });
     }
 

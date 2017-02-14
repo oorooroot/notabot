@@ -28,9 +28,6 @@ export class TelegramBot extends event.EventEmitter implements IBot {
     private uid: string;
     private commandParser: pegjs.Parser;
 
-    get CommandParser(): pegjs.Parser {
-        return this.commandParser;
-    }
     get ID(): string {
         return this.uid;
     }
@@ -57,7 +54,9 @@ export class TelegramBot extends event.EventEmitter implements IBot {
             });
 
         this.client.on('message', (message) => {
-            process.nextTick(() => {this.emit('message', this, new TelegramMessage(message, this)); });
+            process.nextTick(() => {
+                this.parseMessage(new TelegramMessage(message, this));
+            });
         });
     }
 
@@ -101,6 +100,20 @@ export class TelegramBot extends event.EventEmitter implements IBot {
             .then(member => {
                 return PERMISSIONS[permission].indexOf(member.status) > -1;
             });
+    }
+
+    private parseMessage(message: IMessage) {
+        try {
+            var parsedMessage = this.commandParser.parse(message.Text);
+        }
+        catch(error) {
+            Log.write("CommandLine parsing error:", message.Text, error);
+            return;
+        }
+
+        parsedMessage.query.forEach((item, i, arr) => {
+            this.emit("command", item.command, message, item.parameters)
+        });
     }
 }
 

@@ -1,5 +1,4 @@
 import { Map } from "../Utils/Map";
-import { CommandLine } from "../Utils/CommandLine";
 import { IMessage } from "../Bots/IMessage";
 import { ManagerBot } from "../Bots/ManagerBot";
 import { Exception } from "../Utils/Exception";
@@ -59,24 +58,24 @@ export abstract class ContentService extends Service {
         list: { role: 'user', f: this.processListSubscriptions.bind(this) }
     };
 
-    constructor(cmd: CommandLine, updateSchedule: string, debug?:boolean) {
+    constructor(manager: ManagerBot, updateSchedule: string, debug?:boolean) {
         super();
 
-        cmd.on('subscribe', (source: IMessage, params: string[]) => {
+        manager.on('subscribe', (source: IMessage, params: string[]) => {
             if (!params[0] || !this.urlBelongsToService(params[0])) return;
             this.proccessCommand('subscribe', source, params);
         });
 
-        cmd.on('unsubscribe', (source: IMessage, params: string[]) => {
+        manager.on('unsubscribe', (source: IMessage, params: string[]) => {
             if (!params[0] || !this.urlBelongsToService(params[0])) return;
             this.proccessCommand('unsubscribe', source, params);
         });
 
-        cmd.on('list', (source, args) => {
+        manager.on('list', (source, args) => {
             this.proccessCommand('list', source, args);
         });
 
-        cmd.on('refresh', (source, args) => {
+        manager.on('refresh', (source, args) => {
             this.proccessCommand('refresh', source, args);
         });
 

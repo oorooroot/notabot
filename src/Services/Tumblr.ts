@@ -1,5 +1,4 @@
 import { ContentService, NotFoundException, IContentItem, IContentSource, ContentItemType } from "./Service";
-import { CommandLine } from "../Utils/CommandLine";
 import { Map } from "../Utils/Map";
 import { Exception } from "../Utils/Exception";
 import { Log } from "../Utils/Log";
@@ -18,8 +17,8 @@ export class Tumblr extends ContentService {
     protected client: any;
     private patternUser = new RegExp(/(?:(?:http|https):\/\/){0,1}(?:www\.|){0,1}([a-zA-Z0-9_\-]+).tumblr\.com(?:\/[a-zA-Z0-9_\-]+)*/i);
 
-    constructor(protected subscriptions: Subscriptions, protected cmd: CommandLine, protected manager: ManagerBot) {
-        super(cmd, '*/3 * * * *');
+    constructor(protected subscriptions: Subscriptions, protected manager: ManagerBot) {
+        super(manager, '*/3 * * * *');
 
         if(!process.env.TUMBLR_KEY) {
             Log.write(`Failed to load ${this.serviceType} credentials, not initialized!`);

@@ -3,7 +3,6 @@ import * as pegjs from 'pegjs';
 
 export interface IBot {
     ID:string;
-    CommandParser: pegjs.Parser;
 
     connect();
     sendMessage(channelID: string, text: string, options?: any): Promise<any>;
@@ -14,5 +13,6 @@ export interface IBot {
     on(event: 'online', listener: (bot:IBot, botID:string) => void): this;
     on(event: 'offline', listener: (bot:IBot, botID:string) => void): this;
     on(event: 'message', listener: (message:IMessage) => void): this;
+    on(event: 'command', listener: (command:string, message:IMessage, parameters: string[]) => void): this;
     on(event: string, listener: Function): this;
 }

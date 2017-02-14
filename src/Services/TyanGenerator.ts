@@ -1,6 +1,5 @@
 import { DatabaseTable, DatabaseDefinition } from "../Utils/DatabaseTable";
 import { Database, KeyValueArg, QueryResult, NoRowsAffectedDatabaseException } from "../Utils/Database";
-import { CommandLine } from "../Utils/CommandLine";
 import { Map } from "../Utils/Map";
 import { ManagerBot } from "../Bots/ManagerBot";
 import { IMessage } from "../Bots/IMessage";
@@ -18,27 +17,18 @@ export class TyanGenerator extends DatabaseTable {
     private commands: Map<{role:string, f:(source:IMessage, args:string[]) => any}> = {
         request: { role: 'user', f: this.processRequest.bind(this) },
     };
-    private help = `request command: request
-    example: request`;
 
-    constructor(protected db: Database, protected cmd: CommandLine, protected manager: ManagerBot) {
+    constructor(protected db: Database, protected manager: ManagerBot) {
         super(db, TABLE_NAME);
 
-        this.cmd.registerCommand("request");
-
-        cmd.on('реквест', (source:IMessage, params:string[]) => {
-            if(params[0] === 'help') this.proccessHelp(source, params);
-            else this.proccessCommand('request', source, params);
+        manager.on('реквест', (source:IMessage, params:string[]) => {
+            this.proccessCommand('request', source, params);
         });
-        cmd.on('request', (source:IMessage, params:string[]) => {
-            if(params[0] === 'help') this.proccessHelp(source, params);
-            else this.proccessCommand('request', source, params);
+        manager.on('request', (source:IMessage, params:string[]) => {
+            this.proccessCommand('request', source, params);
         });
     }
 
-    private proccessHelp(source:IMessage, params:string[]) {
-        this.manager.replyMessage(source, this.help);
-    }
 
     private proccessCommand(command:string, source:IMessage, params:string[]) {
         var commandSettnigs = this.commands[command];
