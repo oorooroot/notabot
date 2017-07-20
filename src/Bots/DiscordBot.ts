@@ -84,7 +84,7 @@ export class DiscordBot extends event.EventEmitter implements IBot {
     sendMessage(channelID: string, text: string, options?: any): Promise<discord.Message | discord.Message[]> {
         let channel:any = this.client.channels.get(channelID);
         return this.typeMessage(channelID, 1500)
-        .then(() => { return channel.sendMessage(text, options); });
+        .then(() => { return channel.send(text, options); });
     }
 
     replyMessage(sourceMessage:IMessage, text: string, options?: any) : Promise<any> {
@@ -96,7 +96,7 @@ export class DiscordBot extends event.EventEmitter implements IBot {
         let channel:any = this.client.channels.get(channelID);
         return this.typeMessage(channelID, 1500)
         .then(() => { 
-            return channel.sendFile(attachment, null, text); 
+            return channel.send(text, { files: [attachment] }); 
         });
     }
 
@@ -107,7 +107,7 @@ export class DiscordBot extends event.EventEmitter implements IBot {
         }
         
         var userPermissions = (discordMsg.channel as discord.TextChannel).permissionsFor(discordMsg.author);
-        return Promise.resolve(userPermissions.hasPermission(PERMISSIONS[permission], true));
+        return Promise.resolve(userPermissions.has(PERMISSIONS[permission], true));
     }
 
     private parseMessage(message: IMessage) {

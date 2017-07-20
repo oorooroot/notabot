@@ -35,9 +35,9 @@ var discordBot = new DiscordBot(new discord.Client());
 manager.addBot(discordBot);
 discordBot.connect();
 
-var telegramBot = new TelegramBot();
-manager.addBot(telegramBot);
-telegramBot.connect();
+// var telegramBot = new TelegramBot();
+// manager.addBot(telegramBot);
+// telegramBot.connect();
 
 var db = new Database("Database.db");
 var tyanGenerator = new TyanGenerator(db, manager);
