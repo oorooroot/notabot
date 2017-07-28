@@ -1,18 +1,25 @@
-let rest = require('node-rest-client').Client;
+import * as request from 'request';
 
 export class RestClient {
-    private c: any;
 
     constructor() {
-        this.c = new rest();
     }
 
     public get(url: string, args: any): Promise<any> {
         return new Promise<any>((resolve, reject) => {
-            this.c.get(url, args, function (data, response) {
-                if(data.error) reject(new Error(data.message));
-                else resolve(data);
-            });
+            var options = {
+                url,
+                qs: args.parameters,
+                headers: args.headers
+            };
+            request.get(options, (error, response, body) => {
+                if(error) reject(new Error(error));
+                else { 
+                    var data = JSON.parse(body);
+                    if (data && data.error) reject(new Error(data.error));
+                    else resolve(data);
+                }
+            })
         });
     }
 }

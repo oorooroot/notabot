@@ -2,7 +2,6 @@ import { ContentService, NotFoundException, IContentItem, IContentSource, Conten
 import { Map } from "../Utils/Map";
 import { Exception } from "../Utils/Exception";
 import { Log } from "../Utils/Log";
-import { RestClient } from "../Utils/Rest";
 import { Helpers } from "../Utils/Helpers";
 import { ISubscriptionsData, Subscriptions } from "./Subscriptions";
 import { ManagerBot } from "../Bots/ManagerBot";
