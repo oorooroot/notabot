@@ -5,4 +5,5 @@ export interface IMessage {
     ChannelID: string;
     Text: string;
     NativeMessage: any;
+    AuthorID: string;
 }

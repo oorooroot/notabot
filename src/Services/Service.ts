@@ -23,7 +23,9 @@ export abstract class Service {
         
         var commandSettnigs = this.commands[command];
         this.manager.checkMessagePermissions(source, commandSettnigs.role)
-            .then(havePermission => { if (havePermission) commandSettnigs.f(source, params) });
+            .then(havePermission => { 
+                if (havePermission) commandSettnigs.f(source, params);
+            });
     }
 }
 
@@ -52,11 +54,27 @@ export interface IContentSource {
 export abstract class ContentService extends Service {
     protected abstract subscriptions: Subscriptions;
 
-    protected commands: Map<{ role: string, f: (source: IMessage, args: string[]) => any }> = {
-        subscribe: { role: 'admin', f: this.processSubscribeMessage.bind(this) },
-        unsubscribe: { role: 'admin', f: this.processUnsubscribeMessage.bind(this) },
-        refresh: { role: 'admin', f: this.processRefreshSubscriptions.bind(this) },
-        list: { role: 'admin', f: this.processListSubscriptions.bind(this) }
+    protected commands: Map<{ role: string, f: (source: IMessage, args: string[]) => any, help?: string }> = {
+        subscribe: { 
+            role: 'admin',
+            f: this.processSubscribeMessage.bind(this),
+            help: `subscribes channel to service channel/user updates notifications`
+        },
+        unsubscribe: { 
+            role: 'admin',
+            f: this.processUnsubscribeMessage.bind(this),
+            help: `unsubscribes channel from service channel/user updates notifications` 
+        },
+        refresh: {
+            role: 'admin',
+            f: this.processRefreshSubscriptions.bind(this),
+            help: `manually updates all notifications` 
+        },
+        list: { 
+            role: 'admin', 
+            f: this.processListSubscriptions.bind(this),
+            help: `lists all subscriptions` 
+        }
     };
 
     constructor(manager: ManagerBot, updateSchedule: string, debug?:boolean) {
@@ -97,7 +115,7 @@ export abstract class ContentService extends Service {
         })
         .then(items => {
             return Promise.all(items.map(value => {
-                message += value.serviceItemType + ' "' + value.serviceTitle + '" ' + value.url + '\n';
+                message += value.serviceItemType + ' "' + value.serviceTitle + '" <' + value.url + '>\n';
             }));
         })
         .then(items => {

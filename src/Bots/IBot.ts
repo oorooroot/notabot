@@ -6,6 +6,7 @@ export interface IBot {
 
     connect();
     sendMessage(channelID: string, text: string, options?: any): Promise<any>;
+    replyDirectMessage(sourceMessage:IMessage, text: string, options?: any): Promise<any>;
     replyMessage(sourceMessage:IMessage, text: string, options?: any): Promise<any>;
     sendFile(channelID: string, attachment: string, text?:string): Promise<any>;
     checkMessagePermissions(message:IMessage, permission: string): Promise<boolean>;

@@ -24,6 +24,7 @@ export class BotManagerException extends Exception {
 enum OutgoingMessageType {
     Message,
     Reply,
+    ReplyDM,
     File
 }
 
@@ -147,6 +148,45 @@ export class ManagerBot extends events.EventEmitter {
                  }
              );
          }
+    }
+
+    replyDirectMessage(sourceMessage: IMessage, text: string, options?: any): Promise<void> {
+        var bot = this.botList[sourceMessage.BotID];
+
+        return new Promise<void>((resolve, reject) => {
+            if(bot) { 
+                bot.replyDirectMessage(sourceMessage, text, options)
+                .then(() => { resolve(); })
+                .catch(error => {
+                   this.messageQueue.push(
+                        {
+                            date: new Date(),
+                            type: OutgoingMessageType.ReplyDM,
+                            botID: sourceMessage.BotID,
+                            channelID: sourceMessage.ChannelID,
+                            origin: sourceMessage,
+                            text: text,
+                            resolve: resolve,
+                            reject: reject
+                        }
+                   );
+                });  
+            }
+            else {
+                this.messageQueue.push(
+                    {
+                        date: new Date(),
+                        type: OutgoingMessageType.ReplyDM,
+                        botID: sourceMessage.BotID,
+                        channelID: sourceMessage.ChannelID,
+                        origin: sourceMessage,
+                        text: text,
+                        resolve: resolve,
+                        reject: reject
+                    }
+                );
+            }
+        });
     }
 
     sendFile(botID: string, channelID: string, attachment: string, text?:string): Promise<void> {

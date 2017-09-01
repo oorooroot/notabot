@@ -8,6 +8,7 @@ import { Database } from './Utils/Database';
 import { Log } from './Utils/Log';
 import { RestClient } from './Utils/Rest';
 
+import { Help } from './Services/Help';
 import { Subscriptions } from './Services/Subscriptions';
 import { TyanGenerator } from './Services/TyanGenerator';
 import { Gestures } from './Services/Gestures';
@@ -35,11 +36,12 @@ var discordBot = new DiscordBot(new discord.Client());
 manager.addBot(discordBot);
 discordBot.connect();
 
-// var telegramBot = new TelegramBot();
-// manager.addBot(telegramBot);
-// telegramBot.connect();
+//var telegramBot = new TelegramBot();
+//manager.addBot(telegramBot);
+//telegramBot.connect();
 
 var db = new Database("Database.db");
+var help = new Help(manager);
 var tyanGenerator = new TyanGenerator(db, manager);
 var gestures = new Gestures(db, manager);
 

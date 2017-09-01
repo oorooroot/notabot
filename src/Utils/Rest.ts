@@ -14,8 +14,13 @@ export class RestClient {
             };
             request.get(options, (error, response, body) => {
                 if(error) reject(new Error(error));
-                else { 
-                    var data = JSON.parse(body);
+                else {
+                    try {
+                        var data = JSON.parse(body);
+                    }
+                    catch(e) {
+                        reject(e);   
+                    }
                     if (data && data.error) reject(new Error(data.error));
                     else resolve(data);
                 }

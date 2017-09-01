@@ -112,7 +112,7 @@ export class DeviantArt extends ContentService {
                                         title: submission.title,
                                         url: submission.link,
                                         image: {
-                                            url: submission.image.url 
+                                            url: submission.enclosures && submission.enclosures.length > 0 ? submission.enclosures[0].url : submission.image.url 
                                         }
                                     }
                                 }

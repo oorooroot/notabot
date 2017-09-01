@@ -57,7 +57,7 @@ export class DiscordBot extends event.EventEmitter implements IBot {
 		    this.emit('offline', this, this.uid);
         });
         this.client.on('message', (message) => {
-            if(message.channel instanceof discord.DMChannel || (message.author != this.client.user && message.isMentioned(this.client.user)))
+            if((message.author != this.client.user && message.channel instanceof discord.DMChannel) || (message.author != this.client.user && message.isMentioned(this.client.user)))
             {
                 this.parseMessage(new DiscordMessage(message));
             }
@@ -69,7 +69,7 @@ export class DiscordBot extends event.EventEmitter implements IBot {
     }
     
     private typeMessage(channelID: string, delay: number): Promise<void> {
-        let channel:any = this.client.channels.get(channelID);
+        var channel:any = this.client.channels.get(channelID);
         channel.startTyping();
         return new Promise((resolve, reject) => {
             setTimeout(() => {
@@ -81,10 +81,23 @@ export class DiscordBot extends event.EventEmitter implements IBot {
         });
     }
 
-    sendMessage(channelID: string, text: string, options?: any): Promise<discord.Message | discord.Message[]> {
-        let channel:any = this.client.channels.get(channelID);
+    sendMessage(channelID: string, text: string, options?: any): Promise<any> {
+        var channel:any = this.client.channels.get(channelID);
         return this.typeMessage(channelID, 1500)
         .then(() => { return channel.send(text, options); });
+    }
+
+    replyDirectMessage(sourceMessage:IMessage, text: string, options?: any): Promise<any> {
+        var user = this.client.users.get(sourceMessage.AuthorID);
+        var channel: discord.DMChannel;
+        return user.createDM()
+        .then(dmchannel => {
+            channel = dmchannel;
+            return this.typeMessage(channel.id, 1500);
+        })
+        .then(() => { 
+            return channel.send(text, options); 
+        });
     }
 
     replyMessage(sourceMessage:IMessage, text: string, options?: any) : Promise<any> {
@@ -93,7 +106,7 @@ export class DiscordBot extends event.EventEmitter implements IBot {
     }
 
     sendFile(channelID: string, attachment: string, text?:string) : Promise<discord.Message | discord.Message[]> {
-        let channel:any = this.client.channels.get(channelID);
+        var channel:any = this.client.channels.get(channelID);
         return this.typeMessage(channelID, 1500)
         .then(() => { 
             return channel.send(text, { files: [attachment] }); 
@@ -139,6 +152,9 @@ export class DiscordMessage implements IMessage {
     }
     get NativeMessage():discord.Message {
         return this.nativeMessage;
+    }
+    get AuthorID():string {
+        return this.nativeMessage.author.id;
     }
 
     constructor(message: discord.Message) {
